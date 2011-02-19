@@ -17,7 +17,7 @@
  *  The region where the snapshots are held.
  *  Options include: us-e1, us-w1, eu-w1 and
  *  apac-se1.
- * @param v
+ * @param o
  *  (Optional) Defaults to FALSE.
  *  Verbose mode, tells you what it's doing.
  * @param q
@@ -34,7 +34,7 @@
  */
 
 // Debug overriding mode
-define("DEBUG", TRUE);
+define("DEBUG", FALSE);
 
 // Set HTML headers
 header("Content-type: text/html; charset=utf-8");
@@ -43,7 +43,7 @@ header("Content-type: text/html; charset=utf-8");
 require_once 'aws-sdk/sdk.class.php';
 
 // Process paramters and setup constants
-$parameters = getopt('v:r::qnv');
+$parameters = getopt('v:r::qno');
 
 if (!isset($parameters['v'])) {
   exit('EC2 Volume ID required' . "\n");
@@ -73,20 +73,20 @@ else {
 }
 
 if (isset($parameters['q']) || DEBUG) {
-  define("QUIET", FALSE);
-}
-else {
   define("QUIET", TRUE);
 }
+else {
+  define("QUIET", FALSE);
+}
 
-if (isset($paramters['n']) || DEBUG) {
+if (isset($parameters['n']) || DEBUG) {
   define("NOOP", TRUE);
 }
 else {
   define("NOOP", FALSE);
 }
 
-if (isset($parameters['v']) || DEBUG) {
+if (isset($parameters['o']) || DEBUG) {
   define("VERBOSE", TRUE);
 }
 else {
@@ -134,7 +134,7 @@ if ($num <= 1) {
 else {
   // Remove the latest to make sure we always keep at least one snapshot
   $most_recent = array_pop($snapshots);
-  if (VERBOSE) { print date('D d M Y', strtotime($most_recent->startTime)) .' - Keep Most Recent' . "\n"; }
+  if (VERBOSE && !QUIET) { print date('D d M Y', strtotime($most_recent->startTime)) .' - Keep Most Recent' . "\n"; }
 }
 
 $snapshots = array_reverse($snapshots);
@@ -148,8 +148,12 @@ foreach ($snapshots as $snapshot) {
 if (!NOOP) {
   foreach ($snapshots_to_delete as $snapshotId) {
     $response = $ec2->delete_snapshot($snapshotId);
-    if (!$response->isOK() && !QUIET) { exit('Failed to delete snapshot: ' . $snapshotId . "\n"); }
-    if (VERBOSE) { print 'Snapshot ' . $snapshotId . ' deleted.' . "\n"; }
+    if (!$response->isOK() && !QUIET) {
+      print 'Failed to delete snapshot: ' . $snapshotId . "\n";
+    }
+    else if (!QUIET) {
+      print 'Snapshot ' . $snapshotId . ' deleted.' . "\n";
+    }
   }
 }
 
@@ -172,19 +176,19 @@ function keep_or_delete_backup(&$snapshot, &$snapshots_to_delete) {
   
   if ($creation >= $past_week) {
     // Made in the last seven days
-    if (VERBOSE) { print date('D d M Y', $creation) .' - Keep Daily' . "\n"; }
+    if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Keep Daily' . "\n"; }
   }
   else if (date('j', $creation) == 1) {
     // Made on the first day of the month
-    if (VERBOSE) { print date('D d M Y', $creation) .' - Keep Monthly' . "\n"; }
+    if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Keep Monthly' . "\n"; }
   }
   else if (date('w', $creation) == 0 && $creation >= $past_month) {
     // Made on a sunday within the past month
-    if (VERBOSE) { print date('D d M Y', $creation) .' - Keep Weekly' . "\n"; }
+    if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Keep Weekly' . "\n"; }
   }
   else {
     // If it hasn't met one of the above criteria then we can delete it
     $snapshots_to_delete[] = $snapshot->snapshotId;
-    if (VERBOSE) { print date('D d M Y', $creation) .' - Delete' . "\n"; }
+    if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Delete' . "\n"; }
   }
 }

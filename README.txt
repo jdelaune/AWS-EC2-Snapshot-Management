@@ -55,5 +55,5 @@ v  Verbose mode. Tells you what it's doing.
 
 q  Quiet mode. No output.
 
-n  No Operation mode. It won't actually delete any snapshots. Useful along with
+o  No Operation mode. It won't actually delete any snapshots. Useful along with
    verbose mode to see what it will delete the first time you run it.
