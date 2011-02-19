@@ -51,9 +51,9 @@ v  EC2 Volume ID (Required).
 r  EC2 Region (Optional). Defaults to US-EAST-1. Options: us-e1, us-w1, eu-w1
    and apac-se1
 
-v  Verbose mode. Tells you what it's doing.
+o  Verbose mode. Tells you what it's doing.
 
 q  Quiet mode. No output.
 
-o  No Operation mode. It won't actually delete any snapshots. Useful along with
+n  No Operation mode. It won't actually delete any snapshots. Useful along with
    verbose mode to see what it will delete the first time you run it.
