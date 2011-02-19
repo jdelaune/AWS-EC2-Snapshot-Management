@@ -12,7 +12,7 @@ INTRODUCTION
 
 Current Maintainer: Jordan de Laune
 
-AWS EC2 Snapshot Management is a php script which is prunes EC2 snapshots as
+AWS EC2 Snapshot Management is a php script which prunes EC2 snapshots as
 if they were backups. It's meant to be run from the command line.
 
 It will keep snapshots made in the last seven (7) days [Daily], one (1) per
@@ -21,7 +21,9 @@ week for the last month [Weekly] and one (1) per month [Monthly].
 It will always keep at least one snapshot even if it was made a year ago.
 
 This script took inspiration from 'EC2 Manage Snapshots' made by Erik Dasque
-and previously Oren Solomianik. It however requires on the AWS PHP SDK.
+and previously Oren Solomianik. It however requires the AWS PHP SDK.
+
+This script is provided under the Apache 2.0 License.
 
 
 INSTALLATION
