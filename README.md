@@ -42,7 +42,7 @@ http://aws.amazon.com/sdkforphp/
 EXAMPLE
 -------
 
-php aws_ec2_snapshot_management.php -v=vol-11a22222 -r=eu-e1 -q
+    php aws_ec2_snapshot_management.php -v=vol-11a22222 -r=eu-e1 -q
 
 
 PARAMETERS
