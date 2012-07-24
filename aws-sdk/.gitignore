@@ -1,0 +1,5 @@
+*.php
+README.md
+_*
+composer.json
+lib

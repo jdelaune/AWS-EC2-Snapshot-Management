@@ -23,6 +23,8 @@ It will always keep at least one snapshot even if it was made a year ago.
 This script took inspiration from 'EC2 Manage Snapshots' made by Erik Dasque
 and previously Oren Solomianik. It however requires on the AWS PHP SDK.
 
+Updates to regions and AWS-SDK 1.47+ by David Rolston (gizmola)
+
 
 INSTALLATION
 ------------
@@ -30,7 +32,7 @@ INSTALLATION
 AWS EC2 Snapshot Management requires the AWS PHP SDK. Found here:
 http://aws.amazon.com/sdkforphp/
 
-1. Download the AWS PHP SDK and drop it in the aws-sdk directory. So you
+1. Download the AWS PHP SDK and extract it to the aws-sdk directory. So you
    should see the class here: aws-sdk/sdk.class.php
 
 2. Copy aws-sdk/config-sample.inc.php to aws-sdk/config.inc.php and fill
@@ -48,8 +50,8 @@ PARAMETERS
 
 v  EC2 Volume ID (Required).
 
-r  EC2 Region (Optional). Defaults to US-EAST-1. Options: us-e1, us-w1, eu-w1
-   and apac-se1
+r  EC2 Region (Optional). Defaults to US-EAST-1. Options: us-e1, us-w1, us-w2,
+   us-gov1, eu-w1, apac-se1, apac-ne1 and sa-e1
 
 o  Verbose mode. Tells you what it's doing.
 

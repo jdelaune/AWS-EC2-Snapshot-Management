@@ -8,6 +8,7 @@
  * one per month after that.
  *
  * Based on a script by Erik Dasque and possibly Oren Solomianik
+ * Updates to regions and AWS-SDK 1.47+ by David Rolston (gizmola)
  * @link http://www.thecloudsaga.com/aws-ec2-manage-snapshots/ @endlink
  *
  * @param v
@@ -15,8 +16,7 @@
  * @param r
  *  (Optional) Defaults to US-EAST-1.
  *  The region where the snapshots are held.
- *  Options include: us-e1, us-w1, eu-w1 and
- *  apac-se1.
+ *  Options include: us-e1, us-w1, us-w2, us-gov1, eu-w1, apac-se1, apac-ne1 AND sa-e1.
  * @param o
  *  (Optional) Defaults to FALSE.
  *  Verbose mode, tells you what it's doing.
@@ -47,49 +47,25 @@ $parameters = getopt('v:r::qno');
 
 if (!isset($parameters['v'])) {
   exit('EC2 Volume ID required' . "\n");
-}
-else {
+} else {
   define("VOLUME", $parameters['v']);
-}
-
-if (isset($parameters['r'])) {
-  switch($parameters['r']) {
-    case 'us-e1':
-      define("REGION", 'us-east-1');
-      break;
-    case 'us-w1':
-      define("REGION", 'us-west-1');
-      break;
-    case 'eu-w1':
-      define("REGION", 'eu-west-1');
-      break;
-    case 'apac-se1':
-      define("REGION", 'ap-southeast-1');
-      break;
-  }
-}
-else {
-  define("REGION", 'us-east-1');
 }
 
 if (isset($parameters['q']) || DEBUG) {
   define("QUIET", TRUE);
-}
-else {
+} else {
   define("QUIET", FALSE);
 }
 
 if (isset($parameters['n']) || DEBUG) {
   define("NOOP", TRUE);
-}
-else {
+} else {
   define("NOOP", FALSE);
 }
 
 if (isset($parameters['o']) || DEBUG) {
   define("VERBOSE", TRUE);
-}
-else {
+} else {
   define("VERBOSE", FALSE);
 }
 
@@ -98,6 +74,40 @@ define("MONTH", 2678400);
 
 // Instantiate the AmazonEC2 class
 $ec2 = new AmazonEC2();
+
+if (isset($parameters['r'])) {
+	switch($parameters['r']) {
+		case 'us-e1':
+			define("REGION", AmazonEC2::REGION_US_E1);
+			break;
+		case 'us-w1':
+			define("REGION",  AmazonEC2::REGION_US_W1);
+			break;
+		case 'us-w2':
+			define("REGION", AmazonEC2::REGION_US_W2);
+			break;
+		case 'us-gov1':
+			define("REGION", AmazonEC2::REGION_US_GOV1);
+			break;
+		case 'eu-w1':
+			define("REGION", AmazonEC2::REGION_EU_W1);
+			break;
+		case 'apac-se1':
+			define("REGION",  AmazonEC2::REGION_APAC_SE1);
+			break;
+		case 'apac-ne1':
+			define("REGION",  AmazonEC2::REGION_APAC_NE1);
+			break;
+		case 'sa-e1':
+			define("REGION", AmazonEC2::REGION_SA_E1);
+			break;
+
+		default:
+			define("REGION", AmazonEC2::REGION_US_E1);
+	}
+} else {
+	define("REGION", AmazonEC2::REGION_US_E1);
+}
 
 // Set Region
 $ec2->set_region(REGION);
@@ -111,6 +121,8 @@ $response = $ec2->describe_snapshots(
     ),
   )
 );
+
+//var_dump($response); die();
 
 $snapshots = array();
 $snapshots_to_delete = array();
@@ -126,15 +138,15 @@ if ($num <= 1) {
   // We have less than one snapshot don't do anything
   if (!QUIET) {
     exit('Not enough snapshots found to manage' . "\n");
-  }
-  else{
+  } else {
     exit;
   }
-}
-else {
+} else {
   // Remove the latest to make sure we always keep at least one snapshot
   $most_recent = array_pop($snapshots);
-  if (VERBOSE && !QUIET) { print date('D d M Y', strtotime($most_recent->startTime)) .' - Keep Most Recent' . "\n"; }
+  if (VERBOSE && !QUIET) { 
+  	print date('D d M Y', strtotime($most_recent->startTime)) .' - Keep Most Recent' . "\n"; 
+  }
 }
 
 $snapshots = array_reverse($snapshots);
@@ -150,8 +162,7 @@ if (!NOOP) {
     $response = $ec2->delete_snapshot($snapshotId);
     if (!$response->isOK() && !QUIET) {
       print 'Failed to delete snapshot: ' . $snapshotId . "\n";
-    }
-    else if (!QUIET) {
+    } else if (!QUIET) {
       print 'Snapshot ' . $snapshotId . ' deleted.' . "\n";
     }
   }
@@ -159,8 +170,7 @@ if (!NOOP) {
 
 if (!QUIET) {
   print date('D d M Y') . ' - Snapshot Management Complete' . "\n";
-}
-else {
+} else {
   return;
 }
 
@@ -176,17 +186,17 @@ function keep_or_delete_backup(&$snapshot, &$snapshots_to_delete) {
   
   if ($creation >= $past_week) {
     // Made in the last seven days
-    if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Keep Daily' . "\n"; }
-  }
-  else if (date('j', $creation) == 1) {
+    if (VERBOSE && !QUIET) { 
+    	print date('D d M Y', $creation) .' - Keep Daily' . "\n"; 
+    }
+  } else if (date('j', $creation) == 1) {
     // Made on the first day of the month
     if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Keep Monthly' . "\n"; }
   }
   else if (date('w', $creation) == 0 && $creation >= $past_month) {
     // Made on a sunday within the past month
     if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Keep Weekly' . "\n"; }
-  }
-  else {
+  } else {
     // If it hasn't met one of the above criteria then we can delete it
     $snapshots_to_delete[] = $snapshot->snapshotId;
     if (VERBOSE && !QUIET) { print date('D d M Y', $creation) .' - Delete' . "\n"; }
