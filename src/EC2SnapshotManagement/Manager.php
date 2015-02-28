@@ -120,7 +120,7 @@ class Manager
         }
 
         if (count($this->snapshots) == 0) {
-            $this->printLine("No snapshots found for volumne: " . $this->volume . " in region " . self::$regions[$region] . "\n", true);
+            $this->printLine("No snapshots found for volumne: " . $this->volume . " in region " . self::$regions[$this->region] . "\n", true);
             exit;
         }
 
