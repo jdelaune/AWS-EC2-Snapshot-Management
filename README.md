@@ -1,5 +1,4 @@
-CONTENTS OF THIS FILE
----------------------
+# EC2 Snapshot Management
 
  * [Introduction](#introduction)
  * [Installation](#installation)
@@ -7,8 +6,7 @@ CONTENTS OF THIS FILE
  * [Command Line Parameters](#command-line-parameters)
 
 
-INTRODUCTION
-------------
+## Introduction
 
 AWS EC2 Snapshot Management is a php script which prunes EC2 snapshots as if they were backups. It's meant to be run from the command line, but can be called by other PHP scripts if you so desire. As well as cleaning up snapshots it can also be used to take new snapshots as well.
 
@@ -25,8 +23,7 @@ This script took inspiration from 'EC2 Manage Snapshots' made by Erik Dasque and
 This script is provided under the MIT License.
 
 
-INSTALLATION
-------------
+## Installation
 
 Use Composer by adding this requirement to your existing `composer.json` file or by creating one and adding this:
 
@@ -47,8 +44,7 @@ http://docs.aws.amazon.com/aws-sdk-php/guide/latest/credentials.html#credential-
 It expects a profile called `ec2snapshot`.
 
 
-EXAMPLE
--------
+## Example
 
 You will need to create a sample script like the one below:
 
@@ -94,8 +90,7 @@ php myScript.php -v=vol-abcdefgh -r=eu-west-1 -d="My Server Backup" -n -o
 You will probably want to create two scripts to call each function independently!
 
 
-COMMAND LINE PARAMETERS
------------------------
+## Command line parameters
 
 Parameter | Value
 --------- | -------------------------
