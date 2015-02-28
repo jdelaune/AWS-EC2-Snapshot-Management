@@ -1,0 +1,31 @@
+{
+    "name": "jdelaune/aws-ec2-snapshot-management",
+    "description": "AWS EC2 Snapshot Manager for maintaining snapshots",
+    "keywords": [
+        "aws",
+        "ec2",
+        "snapshots",
+        "snapshot management",
+        "backup",
+        "ec2 backup"
+    ],
+    "homepage": "https://github.com/jdelaune/AWS-EC2-Snapshot-Management",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jordan de Laune",
+            "email": "jordan@cultivate4.com",
+            "homepage": "http://www.cultivate4.com",
+            "role": "CEO"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.0",
+        "aws/aws-sdk-php": "2.7.*"
+    },
+    "autoload": {
+        "psr-0": {
+            "EC2SnapshotManagement": "src"
+        }
+    }
+}
