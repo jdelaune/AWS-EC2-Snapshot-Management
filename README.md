@@ -58,16 +58,28 @@ require 'vendor/autoload.php';
 
 use EC2SnapshotManagement\Manager;
 
-$manager = new Manager;
+/**
+ * Create a new EC2 Snapshot Manager
+ *
+ * You don't need to supply any arguments if calling from the command line.
+ *
+ * @param string $volume EC2 Volume Identifier
+ * @param string $region EC2 Region Identifier
+ * @param boolean $quiet Quiet mode, no output
+ * @param boolean $noOperation No operation mode, nothing will get deleted
+ * @param boolean $verbose Verbose, tells you exactly what it's doing
+ * @param string $description Description of new snapshot if creating one
+ */
+$manager = new Manager('vol-abcdefgh', 'eu-west-1', false, true, true, 'My Data Backup');
 
-// Cleanup existing snapshots
-$manager->cleanupSnapshots('vol-abcdefij', 'eu-west-1', false, true, true);
-// OR no arguments if calling this script from the command line
+/**
+ * Cleans up existing old snapshots
+ */
 $manager->cleanupSnapshots();
 
-// Create a new snapshot
-$manager->takeSnapshot('vol-abcdefgh', 'eu-west-1', false, true, true, 'My Server Backup');
-// OR no arguments if calling this script from the command line
+/**
+ * Take a new snapshot
+ */
 $manager->takeSnapshot();
 ```
 
