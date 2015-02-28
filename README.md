@@ -61,14 +61,14 @@ use EC2SnapshotManagement\Manager;
 $manager = new Manager;
 
 // Cleanup existing snapshots
-// $manager->cleanupSnapshots('vol-abcdefij', 'eu-west-1', false, true, true);
+$manager->cleanupSnapshots('vol-abcdefij', 'eu-west-1', false, true, true);
 // OR no arguments if calling this script from the command line
-// $manager->cleanupSnapshots();
+$manager->cleanupSnapshots();
 
 // Create a new snapshot
-// $manager->takeSnapshot('vol-abcdefgh', 'eu-west-1', false, true, true, 'My Server Backup');
+$manager->takeSnapshot('vol-abcdefgh', 'eu-west-1', false, true, true, 'My Server Backup');
 // OR no arguments if calling this script from the command line
-// $manager->takeSnapshot();
+$manager->takeSnapshot();
 ```
 
 Or you can call the script you just created from the command line:
@@ -86,7 +86,7 @@ COMMAND LINE PARAMETERS
 Parameter | Value
 --------- | -------------------------
 v         | EC2 volume identifier (Required).
-r         | EC2 region (Optional). Defaults to us-east-1. Options: us-east-1, us-west-1, us-west-2, eu-west-1, eu-central-1, ap-southeast-1, ap-southeast-2, ap-northeast-1 or sa-east-1.
+r         | EC2 region (Optional). Defaults to us-east-1. Options: <ul><li>us-east-1</li><li>us-west-1</li> <li>us-west-2</il><li>eu-west-1</il><li>eu-central-1</il><li>ap-southeast-1</il><li>ap-southeast-2</il><li>ap-northeast-1</il><li>sa-east-1</il></ul>
 d         | Description, used when creating a snapshot (Optional).
 o         | Verbose mode. Tells you what it's doing (Optional).
 q         | Quiet mode. No output (Optional).
