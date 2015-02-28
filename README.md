@@ -1,10 +1,10 @@
 CONTENTS OF THIS FILE
 ---------------------
 
- * Introduction
- * Installation
- * Example
- * Command Line Parameters
+ * [Introduction](#Introduction)
+ * [Installation](#Installation)
+ * [Example](#Example)
+ * [Command Line Parameters](#Command Line Parameters)
 
 
 INTRODUCTION
