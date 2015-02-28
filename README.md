@@ -100,7 +100,7 @@ COMMAND LINE PARAMETERS
 Parameter | Value
 --------- | -------------------------
 -v=       | EC2 volume identifier (Required).
--r=       | EC2 region (Optional). Defaults to us-east-1.<br><br><ul><li>us-east-1</li><li>us-west-1</li> <li>us-west-2</il><li>eu-west-1</il><li>eu-central-1</il><li>ap-southeast-1</il><li>ap-southeast-2</il><li>ap-northeast-1</il><li>sa-east-1</il></ul>
+-r=       | EC2 region (Optional). Defaults to us-east-1.<br><br><ul><li>us-east-1 - US East (N. Virginia)</li><li>us-west-1 - US West (N. California)</li> <li>us-west-2 - US West (Oregon)</il><li>eu-west-1 - EU (Ireland)</il><li>eu-central-1 - EU (Frankfurt)</il><li>ap-southeast-1 - Asia Pacific (Singapore)</il><li>ap-southeast-2 - Asia Pacific (Sydney)</il><li>ap-northeast-1 - Asia Pacific (Tokyo)</il><li>sa-east-1 - South America (Sao Paulo)</il></ul>
 -d=       | Description, used when creating a snapshot (Optional).
 -o        | Verbose mode. Tells you what it's doing (Optional).
 -q        | Quiet mode. No output (Optional).
