@@ -48,7 +48,7 @@ class Manager
             $description    = (isset($params['d'])) ? $params['d'] : null;
         }
 
-        $this->volume       = (isset($volume)) ? $volume : exit("EC2 Volume ID required\n");
+        $this->volume       = (isset($volume)) ? $volume : exit("\nEC2 Volume ID required\n");
         $this->region       = (isset($region) && array_key_exists($region, self::$regions)) ? $region : 'us-east-1';
         $this->quiet        = (isset($quiet)) ? true : false;
         $this->noOperation  = (isset($noOperation)) ? true : false;
@@ -121,7 +121,7 @@ class Manager
 
         if (count($this->snapshots) == 0) {
             $this->printLine("No snapshots found for volumne: " . $this->volume . " in region " . self::$regions[$this->region] . "\n", true);
-            exit;
+            return;
         }
 
         if (count($this->snapshots) > 0) {
@@ -145,7 +145,7 @@ class Manager
             // In no operation mode?
             if ($this->noOperation) {
                 $this->printLine("\nSnapshot management complete - No operation taken, but would have deleted " . count($this->snapshotsToRemove) . " snapshot(s)\n\n", true);
-                exit;
+                return;
             }
 
             // Remove the snapshots
