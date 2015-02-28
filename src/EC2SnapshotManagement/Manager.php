@@ -15,8 +15,8 @@ class Manager
     private static $month   = 2678400;
     private static $regions = [
         'us-east-1'         => 'US East (N. Virginia)',
-        'us-west-2'         => 'US West (Oregon)',
         'us-west-1'         => 'US West (N. California)',
+        'us-west-2'         => 'US West (Oregon)',
         'eu-west-1'         => 'EU (Ireland)',
         'eu-central-1'      => 'EU (Frankfurt)',
         'ap-southeast-1'    => 'Asia Pacific (Singapore)',
@@ -39,7 +39,7 @@ class Manager
     {
         if ($volume == null) {
             // Check parameters
-            $params         = getopt('v:r::qno');
+            $params         = getopt('v:r::d::qno');
             $volume         = (isset($params['v'])) ? $params['v'] : null;
             $region         = (isset($params['r'])) ? $params['r'] : null;
             $quiet          = (isset($params['q'])) ? $params['q'] : null;

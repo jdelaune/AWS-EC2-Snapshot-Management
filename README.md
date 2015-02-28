@@ -4,7 +4,7 @@ CONTENTS OF THIS FILE
  * Introduction
  * Installation
  * Example
- * Parameters
+ * Command Line Parameters
 
 
 INTRODUCTION
@@ -12,50 +12,82 @@ INTRODUCTION
 
 Current Maintainer: Jordan de Laune
 
-AWS EC2 Snapshot Management is a php script which prunes EC2 snapshots as
-if they were backups. It's meant to be run from the command line.
+AWS EC2 Snapshot Management is a php script which prunes EC2 snapshots as if they were backups. It's meant to be run from the command line, but can be called by other PHP scripts if you so desire. As well as cleaning up snapshots it can also be used to take new snapshots.
 
-It will keep snapshots made in the last seven (7) days [Daily], one (1) per
-week for the last month [Weekly] and one (1) per month [Monthly].
+The cleanup function will keep snapshots made in the last seven days (Daily), one per week for the last month (Weekly) and one per month (Monthly).
 
 It will always keep at least one snapshot even if it was made a year ago.
 
-This script took inspiration from 'EC2 Manage Snapshots' made by Erik Dasque
-and previously Oren Solomianik. It however requires the AWS PHP SDK.
+This script took inspiration from 'EC2 Manage Snapshots' made by Erik Dasque and previously Oren Solomianik. It however requires the AWS PHP SDK.
 
-This script is provided under the Apache 2.0 License.
+This script is provided under the MIT License.
 
 
 INSTALLATION
 ------------
 
-AWS EC2 Snapshot Management requires the AWS PHP SDK. Found here:
-http://aws.amazon.com/sdkforphp/
+Use Composer by adding this requirement to your existing `composer.json` file or by creating one and adding this:
 
-1. Download the AWS PHP SDK and drop it in the aws-sdk directory. So you
-   should see the class here: aws-sdk/sdk.class.php
+```json
+{
+    "require": {
+        "jdelaune/aws-ec2-snapshot-management": "2.0.*"
+    }
+}
+```
 
-2. Copy aws-sdk/config-sample.inc.php to aws-sdk/config.inc.php and fill
-   in your security details.
+The run `composer update` or `composer install`, alternatively you can just run `composer update jdelaune/aws-ec2-snapshot-management.
+
+EC2 Snapshot Management uses the AWS PHP SDK. You will needed to setup your credentials by following the instructions given here:
+
+http://docs.aws.amazon.com/aws-sdk-php/guide/latest/credentials.html#credential-profiles
+
+It expects a profile called `ec2snapshot`.
 
 
 EXAMPLE
 -------
 
-    php aws_ec2_snapshot_management.php -v=vol-11a22222 -r=eu-e1 -q
+You will need to create a sample script like the one below, uncomment as needed:
+
+```php
+<?php
+// myScript.php
+
+require 'vendor/autoload.php';
+
+use EC2SnapshotManagement\Manager;
+
+$manager = new Manager;
+
+// Cleanup existing snapshots
+// $manager->cleanupSnapshots('vol-abcdefij', 'eu-west-1', false, true, true);
+// OR no arguments if calling this script from the command line
+// $manager->cleanupSnapshots();
+
+// Create a new snapshot
+// $manager->takeSnapshot('vol-abcdefgh', 'eu-west-1', false, true, true, 'My Server Backup');
+// OR no arguments if calling this script from the command line
+// $manager->takeSnapshot();
+```
+
+Or you can call the script you just created from the command line:
+
+```shell
+php myScript.php -v=vol-abcdefgh -r=eu-west-1 -n -o -d="My Server Backup"
+```
+
+You will probably want to create two scripts to call each function independently!
 
 
-PARAMETERS
-----------
+COMMAND LINE PARAMETERS
+-----------------------
 
-v  EC2 Volume ID (Required).
-
-r  EC2 Region (Optional). Defaults to US-EAST-1. Options: us-e1, us-w1, eu-w1
-   and apac-se1
-
-o  Verbose mode. Tells you what it's doing.
-
-q  Quiet mode. No output.
-
-n  No Operation mode. It won't actually delete any snapshots. Useful along with
-   verbose mode to see what it will delete the first time you run it.
+Parameter | Value
+--------- | -------------------------
+v         | EC2 volume identifier (Required).
+r         | EC2 region (Optional). Defaults to us-east-1. Options: us-east-1, us-west-1, us-west-2, eu-west-1, eu-central-1, ap-southeast-1, ap-southeast-2, ap-northeast-1 or sa-east-1.
+d         | Description, used when creating a snapshot (Optional).
+o         | Verbose mode. Tells you what it's doing (Optional).
+q         | Quiet mode. No output (Optional).
+n         | No operation mode. It won't actually delete or create any snapshots. Useful along with verbose mode to see what it will do the first time you run it (Optional).
