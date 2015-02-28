@@ -25,7 +25,7 @@
     },
     "autoload": {
         "psr-0": {
-            "EC2SnapshotManagement": "src"
+            "EC2SnapshotManagement": "src/"
         }
     }
 }
