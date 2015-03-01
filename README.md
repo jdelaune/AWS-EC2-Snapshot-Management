@@ -2,6 +2,7 @@
 
  * [Introduction](#introduction)
  * [Installation](#installation)
+ * [Configuration](#configuration)
  * [Example](#example)
  * [Command Line Parameters](#command-line-parameters)
 
@@ -25,17 +26,27 @@ This script is provided under the MIT License.
 
 ## Installation
 
-Use Composer by adding this requirement to your existing `composer.json` file or by creating one and adding this:
+The recommended way to install EC2 Snapshot Management is through [Composer](https://getcomposer.org).
 
-```json
-{
-    "require": {
-        "jdelaune/aws-ec2-snapshot-management": "2.0.*"
-    }
-}
+```shell
+# Install Composer
+curl -sS https://getcomposer.org/installer | php
 ```
 
-The run `composer update` or `composer install`, alternatively you can just run `composer update jdelaune/aws-ec2-snapshot-management`.
+Next, run the Composer command to install the latest stable version of EC2 Snapshot Management:
+
+```shell
+composer require jdelaune/aws-ec2-snapshot-management
+```
+
+After installing, you need to require Composer's autoloader:
+
+```php
+require 'vendor/autoload.php';
+```
+
+
+## Configuration
 
 EC2 Snapshot Management uses the AWS PHP SDK. You will needed to setup your credentials by following the instructions given here:
 
@@ -61,12 +72,12 @@ use EC2SnapshotManagement\Manager;
  *
  * You don't need to supply any arguments if calling from the command line.
  *
- * @param string    $volume EC2 Volume Identifier (optional).
- * @param string    $region EC2 Region Identifier (optional).
- * @param boolean   $quiet Quiet mode, no output (optional).
- * @param boolean   $noOperation No operation mode, nothing will get deleted (optional).
- * @param boolean   $verbose Verbose, tells you exactly what it's doing (optional).
- * @param string    $description Description of new snapshot if creating one (optional).
+ * @param string    $volume         EC2 Volume Identifier (optional).
+ * @param string    $region         EC2 Region Identifier (optional).
+ * @param boolean   $quiet          Quiet mode, no output (optional).
+ * @param boolean   $noOperation    No operation mode, nothing will get deleted (optional).
+ * @param boolean   $verbose        Verbose, tells you exactly what it's doing (optional).
+ * @param string    $description    Description of new snapshot if creating one (optional).
  */
 $manager = new Manager('vol-abcdefgh', 'eu-west-1', false, true, true, 'My Data Backup');
 
@@ -84,7 +95,7 @@ $manager->takeSnapshot();
 Or you can call the script you just created from the command line instead of passing parameters to the class constructor:
 
 ```shell
-php myScript.php -v=vol-abcdefgh -r=eu-west-1 -d="My Server Backup" -n -o
+php myScript.php -v="vol-abcdefgh" -r="eu-west-1" -d="My Server Backup" -n -o
 ```
 
 You will probably want to create two scripts to call each function independently!
