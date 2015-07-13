@@ -75,7 +75,7 @@ class Manager
     /**
      * Create a new snapshot of a volume
      */
-    public function takeSnapshot()
+    public function takeSnapshot( $wait = false )
     {
         try {
             $response = $this->client->createSnapshot([
@@ -83,6 +83,9 @@ class Manager
                 'VolumeId' => $this->volume,
                 'Description' => $this->description
             ]);
+            if ( $wait ) {
+                $result = $this->client->waitUntilSnapshotCompleted($response);
+            }
         }
         catch (\Aws\Ec2\Exception\Ec2Exception $e) {
             if (!$this->noOperation) {
